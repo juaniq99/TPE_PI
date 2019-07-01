@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <string.h>
-typedef struct info
-{
-	int id;
-	char linea;
-	char * estacion;
-}info;
+typedef struct info							//IGNORAR
+{									//
+	int id;								//
+	char linea;							//
+	char * estacion;						//
+}info;									//
 FILE * f;
 
 int main(void)
