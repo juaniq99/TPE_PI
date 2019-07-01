@@ -118,19 +118,22 @@ static estacionADT agregar(infoADT e, estacionADT est){				//agrega a la estacio
 }
 
 static lineaADT agregarEstacionRec(infoADT e, lineaADT l){
-	if (l == NULL || l -> nombre > e -> linea)							//la lista esta ordenada en forma ascendente
+	if (l == NULL || l -> nombre > e -> linea)					//la lista esta ordenada en forma ascendente
 	{																	//segun valor ASCII de la linea 
 		lineaADT nueva = calloc(1, sizeof(lineaCDT));
 		nueva -> nombre = e -> linea;
 		nueva -> next = l;
+		return nueva;
 	}
-	if (l -> nombre != e -> linea)
+	if (l -> nombre != e -> linea) 						//Si no es la linea que estoy agregando
 	{
 		l -> next = agregarEstacionRec(e, l -> next);
 	}
-	l -> first = agregar(e, l -> first);								//cada linea tiene una lista de estaciones
+	else 									//Si es la linea que estoy agregando
+	{
+		l -> first = agregar(e, l -> first);					//cada linea tiene una lista de estaciones
+	}
 	return l;
-
 }
 
 void agregarEstacion(infoADT e, redSubteADT red){				//agrega la estacion e a la red de subte
