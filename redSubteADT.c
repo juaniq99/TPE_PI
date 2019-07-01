@@ -44,14 +44,14 @@ redSubteADT newRed(){
 	return calloc(1, sizeof(redSubteCDT));
 }
 
-static void freeEst(tEstacion * est){
+static void freeEst(estacionCDT * est){
 	if(est == NULL)
 		return;
 	freeEst(est->next);
 	free(est);
 }
 
-static void freeLinea(tLinea * linea){
+static void freeLinea(lineaCDT * linea){
 	if (linea == NULL)
 	{
 		return;
