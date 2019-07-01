@@ -1,11 +1,11 @@
-int diaSemana (int dia, int mes, int anio)
+int diaSemana (int dia, int mes, int anio)				// Algoritmo calendario de Gauss
 {
 	if ( mes==1 || mes==2 )
 			--anio;
 	int c=anio/100;							// Primeros 2 dígitos año
 	int g=anio-c*100;						// Últimos 2 dígitos año
-	int e[]={0,3,2,5,0,3,5,1,4,6,2,4};		// Constante del mes
-	int f;									// Constante del siglo
+	int e[]={0,3,2,5,0,3,5,1,4,6,2,4};				// Constante del mes
+	int f;								// Constante del siglo
 	switch (c%4)
 	{
 		case 0: f=0; break;
