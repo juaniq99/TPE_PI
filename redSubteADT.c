@@ -92,7 +92,7 @@ static lineaADT agregarEstacionRec(infoADT e, lineaADT l){
 	}
 	else 										// Si es la línea que estoy agregando
 	{
-		l -> first = agregar(e, l -> first);					// Cada linea tiene una lista de estaciones
+		l -> first = agregar(e, l -> first);					// Cada línea tiene una lista de estaciones
 	}
 	return l;
 }
@@ -100,6 +100,26 @@ static lineaADT agregarEstacionRec(infoADT e, lineaADT l){
 void agregarEstacion(infoADT e, redSubteADT red){					// Agrega la estación e a la red de subte
 	red -> first = agregarEstacionRec(e, red -> first);				// Se hará de forma recursiva
 
+}
+
+// Cuando se leen los archivos debe extraerse la cantidad de personas
+// que circuló en el horario dado y cargarla en la matriz "pasajeros"
+
+static int diaSemana (int dia, int mes, int anio){					// Algoritmo calendario de Gauss
+	if ( mes==1 || mes==2 )
+			--anio;
+	int c=anio/100;									// Primeros 2 dígitos año
+	int g=anio-c*100;								// Últimos 2 dígitos año
+	int e[]={0,3,2,5,0,3,5,1,4,6,2,4};						// Constante del mes
+	int f;										// Constante del siglo
+	switch (c%4)
+	{
+		case 0: f=0; break;
+		case 1: f=5; break;
+		case 2: f=3; break;
+		case 3: f=1; break;
+	}
+	return (dia+e[mes-1]+f+g+g/4)%7;
 }
 
 // ...
@@ -164,8 +184,8 @@ static void maxEstRec(lineaADT l, FILE * query4){
 	maxEstRec(l -> next, query4);
 }
 
-void maxEst(redSubteCDT * h){								// Máxima cantidad de pasajeros de cada estación 
+void maxEst(redSubteCDT * h){												// Máxima cantidad de pasajeros de cada estación 
 	FILE * query4 = fopen("./query4.csv", "wt");
-	maxEstRec(h -> first, query4);							// se utiliza una funcion recursiva
+	maxEstRec(h -> first, query4);											// se utiliza una funcion recursiva
 	fclose(query4);
 }
