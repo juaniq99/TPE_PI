@@ -90,7 +90,7 @@ static estacionADT agregar(infoADT e, estacionADT est){					// Agrega la estaci√
 		estacionADT nueva = newEstacion();
 		nueva -> id = e -> id;
 		nueva -> nombre = e -> estacion;
-		nueva -> next = est;
+		nueva -> next = est;		
 		return nueva;
 	}
 	est -> next = agregar(e, est -> next);
@@ -103,6 +103,7 @@ static lineaADT agregarEstacionRec(infoADT e, lineaADT l){
 		lineaADT nueva = newLinea();
 		nueva -> nombre = e -> linea;
 		nueva -> next = l;
+		nueva -> first = agregar(e, nueva -> first);
 		return nueva;
 	}
 	if (l -> nombre != e -> linea) 								// Si no es la l√≠nea que estoy agregando
@@ -222,14 +223,3 @@ infoADT guardarDato(infoADT nuevaEst, char * texto){			//Guarda los datos de cad
 	return nuevaEst;
 }
 	
-void leeEstaciones(FILE * arch, redSubteADT r)
-{ 								//El fopen y fclose se hacen en el main. Tambien la validacion de que existan? SI
-	char texto [200];
-	fgets(texto, sizeof(texto), arch);					//Lee la linea con los nombres de los campos
-	while(fgets(texto, sizeof(texto), arch) != NULL)
-	{
-		infoADT nuevaInfo = newInfo();
-		nuevaInfo = guardarDato(nuevaInfo, texto);
-		agregarEstacion(nuevaInfo, r);
-	}
-}

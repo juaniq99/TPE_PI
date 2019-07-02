@@ -17,7 +17,6 @@
   void maxEst(redSubteADT h);                                   // Crea archivo query4.csv con los resultados. De cada línea de subte, la estación más concurrida.
   int leerLinea(FILE * arch, char * texto);                  //Lee una linea del archivo 
   infoADT guardarDato(infoADT nuevaEst, char * texto);          //Guarda el dato, pasando una linea del archivo estaciones.csv
-  void leeEstaciones(FILE * arch, redSubteADT r);
   void agregarEstacion(infoADT e, redSubteADT red);         
 
 #endif
