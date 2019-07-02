@@ -7,12 +7,12 @@
 
 // Estructuras ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-typedef struct info
+typedef struct infoCDT
 {
 	int id;
 	char linea;
 	char * estacion;
-}info;
+}infoCDT;
 
 typedef struct estacionCDT
 {
@@ -42,9 +42,25 @@ typedef struct redSubteCDT
 
 // Armado de listas /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+//Generar Nuevas Estructuras////////////////////////////////////////////////////////////////////////////////////////////////////////////
 redSubteADT newRed(){
 	return calloc(1, sizeof(redSubteCDT));
 }
+
+lineaADT newLinea(){
+	return calloc(1, sizeof(lineaCDT));
+}
+
+estacionADT newEstacion(){
+	return calloc(1, sizeof(estacionCDT));
+}
+
+infoADT newInfo(){
+	return calloc(1, sizeof(infoCDT));
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 static void freeEst(estacionCDT * est){
 	if(est == NULL)
@@ -71,7 +87,7 @@ void freeRed(redSubteADT r){
 static estacionADT agregar(infoADT e, estacionADT est){					// Agrega la estación a la linea correspondiente
 	if (est == NULL || est -> id > e -> id)
 	{
-		estacionADT nueva = calloc(1, sizeof(estacionCDT));
+		estacionADT nueva = newEstacion();
 		nueva -> id = e -> id;
 		nueva -> nombre = e -> estacion;
 		nueva -> next = est;
@@ -83,17 +99,16 @@ static estacionADT agregar(infoADT e, estacionADT est){					// Agrega la estaci�
 
 static lineaADT agregarEstacionRec(infoADT e, lineaADT l){
 	if (l == NULL || l -> nombre > e -> linea)					// La lista esta ordenada en forma ascendente
-	{										// según valor ASCII de la línea 
-		lineaADT nueva = calloc(1, sizeof(lineaCDT));
+	{															// según valor ASCII de la línea 
+		lineaADT nueva = newLinea();
 		nueva -> nombre = e -> linea;
 		nueva -> next = l;
 		return nueva;
 	}
-	if (l -> nombre != e -> linea) 							// Si no es la línea que estoy agregando
+	if (l -> nombre != e -> linea) 								// Si no es la línea que estoy agregando
 	{
 		l -> next = agregarEstacionRec(e, l -> next);
-	}
-	else 										// Si es la línea que estoy agregando
+	}else 														// Si es la línea que estoy agregando
 	{
 		l -> first = agregar(e, l -> first);					// Cada línea tiene una lista de estaciones
 	}
@@ -193,23 +208,33 @@ void maxEst(redSubteCDT * h){												// Máxima cantidad de pasajeros de cad
 	fclose(query4);
 }
 
-	//Funciones para levantar los datos de estaciones.csv y molinetes.csv
+//Funciones para levantar los datos de estaciones.csv y molinetes.csv
+
+char * leerLinea(FILE * arch, char * texto){								//Lee una linea del archivo
+	fgets(texto, sizeof(texto), arch);
+	return texto;
+}
+
+infoADT guardarDato(infoADT nuevaEst, char * texto){			//Guarda los datos de cada linea en una estructura info
+	char * dato = strtok(texto, ",");
+	nuevaEst ->id = atoi(dato);
+	dato = strtok(NULL, ",");
+	nuevaEst -> linea = *dato;
+	dato = strtok(NULL, ","); 												//Llena nuevaEst y carga en la red
+	nuevaEst -> estacion = dato;
+
+}
 	
 void leeEstaciones(FILE * arch, redSubteADT r)
 { 								//El fopen y fclose se hacen en el main. Tambien la validacion de que existan?
-	char texto[50];
+	char * texto;
 	char * dato;
-	info nuevaEst;
-	fgets(texto, sizeof(texto), arch); 			//Lee la linea con los nombres de los campos
+	infoADT nuevaInfo = newInfo();
+	texto = leerLinea(arch, texto); 			//Lee la linea con los nombres de los campos
 
-	while(fgets(texto, sizeof(texto), arch) != NULL)
+	while(leerLinea(arch, texto) != NULL)
 	{
-		dato = strtok(texto, ",");
-		nuevaEst.id = atoi(dato);
-		dato = strtok(NULL, ",");
-		nuevaEst.linea = *dato;
-		dato = strtok(NULL, ","); 			//Llena nuevaEst y carga en la red
-		nuevaEst.estacion = dato;
-		agregarEstacion(&nuevaEst, r);
+		nuevaInfo = guardarDato(nuevaInfo, texto);
+		agregarEstacion(nuevaInfo, r);
 	}
 }
