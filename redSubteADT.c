@@ -210,10 +210,6 @@ void maxEst(redSubteCDT * h){												// Máxima cantidad de pasajeros de cad
 
 //Funciones para levantar los datos de estaciones.csv y molinetes.csv
 
-char * leerLinea(FILE * arch, char * texto){								//Lee una linea del archivo
-	fgets(texto, sizeof(texto), arch);
-	return texto;
-}
 
 infoADT guardarDato(infoADT nuevaEst, char * texto){			//Guarda los datos de cada linea en una estructura info
 	char * dato = strtok(texto, ",");
@@ -222,18 +218,17 @@ infoADT guardarDato(infoADT nuevaEst, char * texto){			//Guarda los datos de cad
 	nuevaEst -> linea = *dato;
 	dato = strtok(NULL, ","); 												//Llena nuevaEst y carga en la red
 	nuevaEst -> estacion = dato;
-
+	printf("%d %c %s\n", nuevaEst -> id, nuevaEst -> linea, nuevaEst -> estacion);
+	return nuevaEst;
 }
 	
 void leeEstaciones(FILE * arch, redSubteADT r)
-{ 								//El fopen y fclose se hacen en el main. Tambien la validacion de que existan?
-	char * texto;
-	char * dato;
-	infoADT nuevaInfo = newInfo();
-	texto = leerLinea(arch, texto); 			//Lee la linea con los nombres de los campos
-
-	while(leerLinea(arch, texto) != NULL)
+{ 								//El fopen y fclose se hacen en el main. Tambien la validacion de que existan? SI
+	char texto [200];
+	fgets(texto, sizeof(texto), arch);					//Lee la linea con los nombres de los campos
+	while(fgets(texto, sizeof(texto), arch) != NULL)
 	{
+		infoADT nuevaInfo = newInfo();
 		nuevaInfo = guardarDato(nuevaInfo, texto);
 		agregarEstacion(nuevaInfo, r);
 	}
