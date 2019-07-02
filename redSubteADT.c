@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "redSubteADT.h"
 
 // Estructuras ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -15,6 +16,7 @@ typedef struct info
 
 typedef struct estacionCDT
 {
+	char * nombre;
 	long int cant_pas;					// Pasajeros que pasan en la estación
 	int id;														
 	struct estacionCDT * next;
@@ -71,6 +73,7 @@ static estacionADT agregar(infoADT e, estacionADT est){					// Agrega la estaci�
 	{
 		estacionADT nueva = calloc(1, sizeof(estacionCDT));
 		nueva -> id = e -> id;
+		nueva -> nombre = e -> estacion;
 		nueva -> next = est;
 		return nueva;
 	}
@@ -188,4 +191,25 @@ void maxEst(redSubteCDT * h){												// Máxima cantidad de pasajeros de cad
 	FILE * query4 = fopen("./query4.csv", "wt");
 	maxEstRec(h -> first, query4);											// se utiliza una funcion recursiva
 	fclose(query4);
+}
+
+	//Funciones para levantar los datos de estaciones.csv y molinetes.csv
+	
+void leeEstaciones(FILE * arch, redSubteADT r)
+{ 								//El fopen y fclose se hacen en el main. Tambien la validacion de que existan?
+	char texto[50];
+	char * dato;
+	info nuevaEst;
+	fgets(texto, sizeof(texto), arch); 			//Lee la linea con los nombres de los campos
+
+	while(fgets(texto, sizeof(texto), arch) != NULL)
+	{
+		dato = strtok(texto, ",");
+		nuevaEst.id = atoi(dato);
+		dato = strtok(NULL, ",");
+		nuevaEst.linea = *dato;
+		dato = strtok(NULL, ","); 			//Llena nuevaEst y carga en la red
+		nuevaEst.estacion = dato;
+		agregarEstacion(&nuevaEst, r);
+	}
 }
