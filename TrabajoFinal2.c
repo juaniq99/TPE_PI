@@ -8,7 +8,7 @@ FILE * estaciones;
 
 void leeEstaciones(FILE * arch, redSubteADT r)
 { 								
-	char texto [10000];
+	char texto [200];
 	fgets(texto, sizeof(texto), arch);					//Lee la linea con los nombres de los campos
 	while(fgets(texto, sizeof(texto), arch) != NULL)
 	{
@@ -20,7 +20,7 @@ void leeEstaciones(FILE * arch, redSubteADT r)
 }
 
 void leeMolinetes(FILE * arch, redSubteADT r){
-	char texto[10000];
+	char texto[200];
 	fgets(texto, sizeof(texto), arch);
 	while(fgets(texto, sizeof(texto), arch) != NULL){
 		infoMolineteADT nuevaInfo = newInfoMolinete();
